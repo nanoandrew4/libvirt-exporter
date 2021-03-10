@@ -3,19 +3,16 @@ Project forked from https://github.com/kumina/libvirt_exporter and substantially
 Implemented support for several additional metrics, ceph rbd (and network block devices), ovs.
 Implemented statistics collection using GetAllDomainStats
 
-And then forked again from https://github.com/rumanzo/libvirt_exporter_improved and rewritten.
+Then forked again from https://github.com/rumanzo/libvirt_exporter_improved and rewritten.
 Implemented meta metrics and more info about disks, interfaces and domain.
+
+And then forked again from https://github.com/AlexZzz/libvirt-exporter and rewritten to use the [go-libvirt](https://github.com/digitalocean/go-libvirt) library instead of native C libvirt bindings. Changed error handling and some metrics to suit my current needs. Also fixes the memory metrics to use data provided by the balloon driver, which when coupled with [memory autodeflation](https://libvirt.org/formatdomain.html#memory-balloon-device) gives accurate memory usage data.
 
 This repository provides code for a Prometheus metrics exporter
 for [libvirt](https://libvirt.org/). This exporter connects to any
 libvirt daemon and exports per-domain metrics related to CPU, memory,
 disk and network usage. By default, this exporter listens on TCP port
 9177.
-
-This exporter makes use of
-[libvirt-go](https://github.com/libvirt/libvirt-go), the official Go
-bindings for libvirt. This exporter make use of the
-`GetAllDomainStats()`
 
 The following metrics/labels are being exported:
 
@@ -63,6 +60,4 @@ libvirt_domain_memory_stats_used_percent{domain="..."}
 libvirt_up
 ```
 
-Repository contains a shell script, `build_static.sh`, that builds a
-statically linked copy of this exporter in an Alpine Linux based
-container.
+Repository contains a shell script, `build_binary.sh`, that builds the binary in a golang docker image, since compiling in alpine images results in a corrupted binary.
